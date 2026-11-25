@@ -1,0 +1,20 @@
+# Supabase 無料プランの休止対策：数日おきに軽いリクエストを送る
+# （このファイルは GitHub Pages 用リポジトリ usagi-15/mycover に置く）
+# 公開期間（少なくとも 2026/12/18）が過ぎたら、このファイルを消すか Actions で無効にしてよい
+name: keepalive
+
+on:
+  schedule:
+    - cron: "17 3 */2 * *"   # 2日おき 03:17（UTC）
+  workflow_dispatch:          # Actions タブから手動でも実行できる
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          curl -fsS -X POST "https://hasykewktdnsqgrnzgij.supabase.co/rest/v1/rpc/get_card" \
+            -H "apikey: sb_publishable_tV56DfmPw7fX5CfcCKNEyA_1yI9Dxwm" \
+            -H "Content-Type: application/json" \
+            -d '{"p_card_token":"keepalive"}'

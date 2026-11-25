@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#06061f">
+<title>My Cover</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="./">My Cover</a>
+  <p class="no" id="no"></p>
+</header>
+
+<main id="main">
+  <!-- 読み込み中・エラー -->
+  <section id="loading" class="state">
+    <p class="msg" id="loading-msg">読み込んでいます…</p>
+  </section>
+  <section id="error" class="state hidden">
+    <p class="msg" id="error-msg"></p>
+    <a class="pill" href="./">『My Cover』作品ページへ</a>
+  </section>
+
+  <!-- M1 曲とジャケット（あなた盤） -->
+  <section id="m1" class="hidden">
+    <div class="hero">
+      <div class="hero-bg" id="hero-bg" aria-hidden="true"></div>
+      <!-- 長押しで保存できるよう <img> で置く（背景画像にしない） -->
+      <img id="jacket" class="art" alt="あなたの『My Cover』ジャケット">
+    </div>
+    <div class="head">
+      <h1 class="title" id="track-title"></h1>
+      <p class="artist" id="artist"></p>
+      <p class="meta" id="meta"></p>
+    </div>
+
+    <div class="player">
+      <input type="range" class="seek" id="seek" min="0" step="0.1" value="0" aria-label="再生位置">
+      <div class="times"><span id="pos">0:00</span><span id="dur">-:--</span></div>
+      <div class="controls">
+        <button class="skip" id="back10" aria-label="10秒戻す">−10</button>
+        <button class="play" id="play" aria-label="再生"></button>
+        <button class="skip" id="fwd10" aria-label="10秒送る">+10</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="pill primary" id="download" download>Download (MP3)</a>
+    </div>
+    <p class="hint">ジャケットを長押しすると画像として保存できます</p>
+
+    <ol class="tracks">
+      <li>
+        <span class="n">1</span>
+        <span class="t"><b id="row-title"></b><small id="row-artist"></small></span>
+        <span class="d" id="row-dur"></span>
+      </li>
+    </ol>
+
+    <section class="card words">
+      <h2>入力したプロンプト</h2>
+      <p id="prompt"></p>
+    </section>
+  </section>
+
+  <!-- M2 未ひも付けカード -->
+  <section id="m2" class="hidden">
+    <div class="hero">
+      <div class="art empty"><span>まだジャケットがありません</span></div>
+    </div>
+    <div class="head">
+      <h1 class="m2-title">このカードにはまだ<br>ジャケットがひもづいていません</h1>
+      <p class="m2-desc">会場でジャケットを作成し、完成後「Take It Home（カードで持ち帰る）」を選択すると、このカードにあなたのジャケットと楽曲がひもづきます。</p>
+    </div>
+  </section>
+
+  <!-- 作品ページ（?t= / ?c= なしで開いたとき） -->
+  <section id="home" class="hidden">
+    <div class="home-hero">
+      <div class="home-stack" id="home-stack" aria-hidden="true"></div>
+      <h1 class="home-title">My Cover</h1>
+      <p class="home-catch" id="home-catch"></p>
+    </div>
+    <section class="card">
+      <h2>About</h2>
+      <p class="body" id="work-intro"></p>
+    </section>
+  </section>
+
+  <!-- 特設エリア（M1・M2・作品ページの共通部分） -->
+  <section id="special" class="hidden">
+    <section class="card release" id="release">
+      <h2>Release</h2>
+      <p class="sub" id="release-sub"></p>
+
+      <div class="rel-item">
+        <p class="label">公式ジャケット</p>
+        <div id="official-before">
+          <p class="date" id="official-date"></p>
+          <p class="countdown" id="official-count"></p>
+        </div>
+        <div id="official-after" class="hidden">
+          <!-- あなた盤と公式盤を並べる -->
+          <div class="compare" id="compare">
+            <figure id="mine-fig"><img id="mine" alt="あなた盤"><figcaption>あなた盤</figcaption></figure>
+            <figure id="official-fig"><img id="official" alt="公式盤"><figcaption>公式盤</figcaption></figure>
+          </div>
+          <a class="pill" id="official-dl" download>公式ジャケットをダウンロード</a>
+        </div>
+      </div>
+
+      <div class="rel-item">
+        <p class="label">MV</p>
+        <div id="mv-before">
+          <p class="date" id="mv-date"></p>
+          <p class="countdown" id="mv-count"></p>
+        </div>
+        <div id="mv-after" class="hidden">
+          <a class="pill primary" id="mv-link" href="#">MV を見る（YouTube）</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="card hidden" id="song">
+      <h2 id="song-title"></h2>
+      <p class="body" id="song-intro"></p>
+    </section>
+
+    <section class="block" id="everyone">
+      <div class="block-head">
+        <h2>みんなの My Cover</h2>
+        <span class="count" id="everyone-count"></span>
+      </div>
+      <p class="sub">同じ一曲を聴いても、生まれたジャケットは違う。</p>
+      <div class="shelf" id="shelf"></div>
+      <button class="pill hidden" id="more">もっと見る</button>
+      <a class="pill" id="to-home" href="./">すべて見る（作品ページ）</a>
+    </section>
+
+    <section class="card info" id="info-card">
+      <h2>Exhibition</h2>
+      <div id="info"></div>
+    </section>
+  </section>
+</main>
+
+<!-- ジャケットを大きく見る -->
+<div id="viewer" class="viewer hidden" role="dialog" aria-modal="true" aria-label="ジャケット">
+  <button class="close" id="viewer-close" aria-label="閉じる">×</button>
+  <img id="viewer-img" alt="">
+  <p class="viewer-no" id="viewer-no"></p>
+  <p class="viewer-prompt" id="viewer-prompt"></p>
+</div>
+
+<footer class="foot">
+  <a href="./" id="foot-home">『My Cover』作品ページへ</a>
+  <p class="credit" id="credit"></p>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
