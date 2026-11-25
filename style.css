@@ -208,3 +208,20 @@ html { scroll-behavior: smooth; }
 .credit-name { margin: 12px 0 0; font-family: var(--serif); font-size: 24px; }
 .credit-name small { display: block; font-family: var(--sans); font-size: 13px; color: var(--muted); letter-spacing: .08em; }
 .credit-aff { margin: 10px 0 0; font-size: 13px; line-height: 1.9; white-space: pre-line; }
+
+/* ---------- 体験の流れ（段階ごと） ---------- */
+.phase { margin-top: 20px; }
+.phase-title { margin: 0 0 10px; font-family: var(--serif); font-size: 15px; color: var(--fg); letter-spacing: .06em;
+  padding: 6px 12px; border-radius: 8px; background: rgba(255, 255, 255, .07); }
+.phase .steps { margin-top: 6px; counter-reset: none; }
+.phase .steps li { counter-increment: step; }
+.journey { counter-reset: step; }
+.step-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.step-head b { margin-right: 4px; }
+.tag { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; font-size: 11px;
+  border: 1px solid rgba(255, 255, 255, .35); color: var(--muted); }
+.step-action { margin: 6px 0 0; font-size: 14px; line-height: 1.8; }
+.step-detail { margin: 8px 0 0; }
+.j-row { margin-top: 6px; }
+.j-row dt { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+.j-row dd { margin: 0; font-size: 13px; line-height: 1.8; color: rgba(255, 255, 255, .85); }

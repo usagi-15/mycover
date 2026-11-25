@@ -150,9 +150,19 @@
       el("div", { className: "meaning" }, el("b", { textContent: m.word }), el("small", { textContent: m.reading }), el("p", { textContent: m.text }))));
     hideIfEmpty("about", d.about);
 
-    $("d-steps").replaceChildren(...(d.steps || []).map((s) =>
-      el("li", {}, el("span", { className: "en", textContent: s.en }), el("b", { textContent: s.title }), el("p", { textContent: s.text }))));
-    hideIfEmpty("experience", (d.steps || []).length);
+    // 体験の流れ：段階ごとに、鑑賞者の行動・体験してほしいこと・制作者の意図
+    const j = d.journey;
+    const row = (label, text) => el("div", { className: "j-row" }, el("dt", { textContent: label }), el("dd", { textContent: text }));
+    $("d-journey").replaceChildren(...(j?.phases || []).map((ph) => el("section", { className: "phase" },
+      el("h3", { className: "phase-title", textContent: ph.title }),
+      el("ol", { className: "steps" }, ...ph.steps.map((st) => el("li", {},
+        el("div", { className: "step-head" }, el("b", { textContent: st.title }),
+          ...(st.tags || []).map((t) => el("span", { className: "tag", textContent: t }))),
+        el("p", { className: "step-action", textContent: st.action }),
+        el("dl", { className: "step-detail" }, row("体験してほしいこと", st.feel), row("制作者の意図", st.intent))))))));
+    if (j?.records) $("d-records").textContent = `記録するもの：${j.records}`;
+    else $("d-records").remove();
+    hideIfEmpty("experience", (j?.phases || []).length);
 
     const r = d.research;
     if (r) {
