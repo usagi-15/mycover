@@ -124,11 +124,95 @@
   // ---------------------------------------------------------------- 作品ページ
   function showHome() {
     $("home-catch").textContent = C.work.catch;
-    $("work-intro").textContent = C.work.intro;
     $("foot-home").classList.add("hidden");
     $("to-home").classList.add("hidden");
     show("home");
     setupSpecial({ home: true });
+    renderDetail();
+    setupMenu();
+  }
+
+  // 展示作品の詳細（config.js の detail）。項目が無ければその欄は出さない
+  const el = (tag, props, ...children) => {
+    const e = Object.assign(document.createElement(tag), props || {});
+    e.append(...children);
+    return e;
+  };
+  function renderDetail() {
+    const d = C.detail;
+    if (!d) return;
+    const hideIfEmpty = (id, ok) => { if (!ok) $(id).remove(); };
+
+    $("d-subtitle").textContent = d.subtitle || "";
+    $("d-lead").textContent = d.about?.lead || "";
+    $("d-body").replaceChildren(...(d.about?.body || []).map((t) => el("p", { textContent: t })));
+    $("d-meanings").replaceChildren(...(d.about?.meanings || []).map((m) =>
+      el("div", { className: "meaning" }, el("b", { textContent: m.word }), el("small", { textContent: m.reading }), el("p", { textContent: m.text }))));
+    hideIfEmpty("about", d.about);
+
+    $("d-steps").replaceChildren(...(d.steps || []).map((s) =>
+      el("li", {}, el("span", { className: "en", textContent: s.en }), el("b", { textContent: s.title }), el("p", { textContent: s.text }))));
+    hideIfEmpty("experience", (d.steps || []).length);
+
+    const r = d.research;
+    if (r) {
+      $("d-question").textContent = r.question || "";
+      $("d-research").replaceChildren(...(r.body || []).map((t) => el("p", { textContent: t })));
+      $("d-notice").textContent = r.notice || "";
+      if (!r.notice) $("d-notice").remove();
+    }
+    hideIfEmpty("research", r);
+
+    const sys = d.system;
+    if (sys) {
+      $("d-flow").replaceChildren(...(sys.flow || []).map((t) => el("li", { textContent: t })));
+      $("d-points").replaceChildren(...(sys.points || []).map((t) => el("li", { textContent: t })));
+    }
+    hideIfEmpty("system", sys);
+    $("home-detail").classList.remove("hidden");
+
+    const ex = d.exhibition;
+    if (ex) {
+      $("ex-theme").textContent = ex.theme ? `${ex.name}「${ex.theme}」` : ex.name || "";
+      const facts = [["会期", ex.period], ["時間", ex.hours], ["会場", ex.venue], ["形式", ex.format]].filter(([, v]) => v);
+      $("ex-facts").replaceChildren(...facts.flatMap(([k, v]) => [el("dt", { textContent: k }), el("dd", { textContent: v })]));
+      $("ex-layout").replaceChildren(...(ex.layout || []).map((l) => el("li", {}, el("b", { textContent: l.place }), l.detail)));
+      if (ex.mapUrl) { $("ex-map").href = ex.mapUrl; $("ex-map").classList.remove("hidden"); }
+      $("exhibition").classList.remove("hidden");
+      $("info-card").classList.add("hidden"); // 簡易版の展示情報は出さない
+    }
+
+    const cr = d.credit;
+    if (cr) {
+      $("cr-name").textContent = cr.name || "";
+      $("cr-name-en").textContent = cr.nameEn || "";
+      $("cr-aff").textContent = (cr.affiliation || []).join("\n");
+      if (C.authorUrl) $("credit").append(el("a", { className: "pill", href: C.authorUrl, target: "_blank", rel: "noopener", textContent: "作者HP" }));
+      $("credit").classList.remove("hidden");
+    }
+  }
+
+  // メニュー：表示されている項目だけを並べ、いま見ている項目を白くする
+  function setupMenu() {
+    const items = [["release", "Release"], ["song", C.track.title], ["about", "About"], ["experience", "Experience"],
+      ["research", "Research"], ["system", "System"], ["everyone", "Gallery"], ["exhibition", "Exhibition"], ["credit", "Credit"]]
+      .filter(([id]) => $(id) && $(id).offsetParent !== null);
+    const menu = $("menu");
+    menu.replaceChildren(...items.map(([id, label]) => el("a", { href: `#${id}`, textContent: label })));
+    menu.classList.remove("hidden");
+    const links = [...menu.querySelectorAll("a")];
+    const setActive = (id) => {
+      links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === `#${id}`));
+      const a = links.find((x) => x.getAttribute("href") === `#${id}`);
+      if (a) menu.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" });
+    };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (hit) setActive(hit.target.id);
+      }, { rootMargin: "-120px 0px -55% 0px" });
+      items.forEach(([id]) => io.observe($(id)));
+    }
   }
 
   // ---------------------------------------------------------------- 特設エリア
@@ -212,9 +296,9 @@
 
     // 展示情報
     fillInfo($("info"));
-    $("credit").textContent = C.exhibition[C.exhibition.length - 1];
+    $("foot-credit").textContent = C.exhibition[C.exhibition.length - 1];
     if (C.authorUrl) {
-      $("credit").append(" ／ ", Object.assign(document.createElement("a"), { href: C.authorUrl, textContent: "作者HP", target: "_blank", rel: "noopener" }));
+      $("foot-credit").append(" ／ ", Object.assign(document.createElement("a"), { href: C.authorUrl, textContent: "作者HP", target: "_blank", rel: "noopener" }));
     }
 
     setupEveryone({ mine, home });

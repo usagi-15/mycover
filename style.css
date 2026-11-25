@@ -27,8 +27,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 main { max-width: 560px; margin: 0 auto; }
 
 /* ---------- 上のバー ---------- */
-.bar { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: baseline;
-  padding: 14px 20px 10px; background: linear-gradient(var(--bg) 60%, rgba(6, 6, 31, 0)); }
+.bar { position: sticky; top: 0; z-index: 5; padding: 14px 0 10px; background: linear-gradient(var(--bg) 70%, rgba(6, 6, 31, 0)); }
+.bar-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0 20px; }
 .logo { font-family: var(--serif); font-size: 24px; color: var(--fg); text-decoration: none; letter-spacing: .02em; }
 .no { margin: 0; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
@@ -154,3 +154,57 @@ main { max-width: 560px; margin: 0 auto; }
 @media (prefers-reduced-motion: no-preference) {
   .art, .tile img { transition: opacity .3s; }
 }
+
+/* ---------- 作品ページのメニュー（横にスクロール） ---------- */
+.menu { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-top: 10px; padding: 0 16px 2px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent); }
+.menu::-webkit-scrollbar { display: none; }
+.menu a { flex: none; display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border-radius: 999px;
+  font-size: 13px; color: var(--muted); text-decoration: none; border: 1px solid var(--card-line); background: rgba(6, 6, 31, .6); }
+.menu a.active { color: var(--bg); background: #fff; border-color: #fff; }
+/* メニューで移動したとき、上のバーに隠れないように */
+#release, #song, #about, #experience, #research, #system, #everyone, #exhibition, #credit { scroll-margin-top: 112px; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ---------- 展示作品の詳細 ---------- */
+.lead { margin: 14px 0 0; font-family: var(--serif); font-size: 19px; line-height: 1.8; }
+.body-list p { margin: 12px 0 0; font-size: 14px; line-height: 2; }
+.meanings { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.meaning { padding: 14px; border-radius: 10px; border: 1px solid var(--card-line); }
+.meaning b { display: block; font-family: var(--serif); font-size: 20px; font-weight: 400; }
+.meaning small { display: block; font-size: 12px; color: var(--muted); }
+.meaning p { margin: 8px 0 0; font-size: 13px; line-height: 1.8; }
+
+.steps { list-style: none; margin: 16px 0 0; padding: 0; counter-reset: step; }
+.steps li { position: relative; padding: 0 0 18px 44px; counter-increment: step; }
+.steps li::before { content: counter(step); position: absolute; left: 0; top: 2px; width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .5); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.steps li:not(:last-child)::after { content: ""; position: absolute; left: 14px; top: 34px; bottom: 4px; width: 1px; background: var(--card-line); }
+.steps .en { display: block; font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+.steps b { display: block; font-family: var(--serif); font-size: 18px; font-weight: 400; }
+.steps p { margin: 4px 0 0; font-size: 13px; line-height: 1.9; color: rgba(255, 255, 255, .85); }
+
+.question { margin: 16px 0 0; padding: 0 0 0 14px; border-left: 2px solid #fff; font-family: var(--serif); font-size: 17px; line-height: 1.9; }
+.notice { margin: 16px 0 0; padding: 12px 14px; border-radius: 10px; background: rgba(255, 255, 255, .06); font-size: 12px; line-height: 1.8; color: var(--muted); }
+
+.flow { list-style: none; margin: 16px 0 0; padding: 0; }
+.flow li { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--card-line); font-size: 14px; text-align: center; }
+.flow li:not(:last-child) { margin-bottom: 22px; position: relative; }
+.flow li:not(:last-child)::after { content: "↓"; position: absolute; left: 50%; bottom: -21px; transform: translateX(-50%); color: var(--muted); font-size: 13px; }
+.points { margin: 18px 0 0; padding-left: 1.2em; }
+.points li { font-size: 13px; line-height: 1.9; margin-top: 6px; }
+
+.facts { display: grid; grid-template-columns: 5.5em 1fr; gap: 8px 12px; margin: 16px 0 0; font-size: 14px; line-height: 1.7; }
+.facts dt { color: var(--muted); font-size: 12px; padding-top: 2px; }
+.facts dd { margin: 0; }
+.card h3 { margin: 22px 0 0; font-size: 13px; font-weight: 400; color: var(--muted); letter-spacing: .06em; }
+.layout { list-style: none; margin: 8px 0 0; padding: 0; }
+.layout li { padding: 10px 0; border-bottom: 1px solid var(--card-line); font-size: 13px; line-height: 1.8; }
+.layout b { display: block; font-weight: 500; font-size: 14px; }
+#exhibition .pill, #credit .pill { margin-top: 16px; width: 100%; }
+
+.credit-name { margin: 12px 0 0; font-family: var(--serif); font-size: 24px; }
+.credit-name small { display: block; font-family: var(--sans); font-size: 13px; color: var(--muted); letter-spacing: .08em; }
+.credit-aff { margin: 10px 0 0; font-size: 13px; line-height: 1.9; white-space: pre-line; }

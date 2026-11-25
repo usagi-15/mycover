@@ -10,8 +10,12 @@
 </head>
 <body>
 <header class="bar">
-  <a class="logo" href="./">My Cover</a>
-  <p class="no" id="no"></p>
+  <div class="bar-row">
+    <a class="logo" href="./">My Cover</a>
+    <p class="no" id="no"></p>
+  </div>
+  <!-- 作品ページのメニュー（項目へ移動）。中身は app.js が作る -->
+  <nav class="menu hidden" id="menu" aria-label="ページ内の項目"></nav>
 </header>
 
 <main id="main">
@@ -84,10 +88,6 @@
       <h1 class="home-title">My Cover</h1>
       <p class="home-catch" id="home-catch"></p>
     </div>
-    <section class="card">
-      <h2>About</h2>
-      <p class="body" id="work-intro"></p>
-    </section>
   </section>
 
   <!-- 特設エリア（M1・M2・作品ページの共通部分） -->
@@ -129,6 +129,38 @@
       <p class="body" id="song-intro"></p>
     </section>
 
+    <!-- 作品ページだけ：展示作品の詳細（リリース情報・曲の紹介より下） -->
+    <div id="home-detail" class="hidden">
+      <section class="card" id="about">
+        <h2>About</h2>
+        <p class="sub" id="d-subtitle"></p>
+        <p class="lead" id="d-lead"></p>
+        <div class="body-list" id="d-body"></div>
+        <div class="meanings" id="d-meanings"></div>
+      </section>
+
+      <section class="card" id="experience">
+        <h2>Experience</h2>
+        <p class="sub">体験の流れ</p>
+        <ol class="steps" id="d-steps"></ol>
+      </section>
+
+      <section class="card" id="research">
+        <h2>Research</h2>
+        <p class="sub">この作品で考えたいこと</p>
+        <blockquote class="question" id="d-question"></blockquote>
+        <div class="body-list" id="d-research"></div>
+        <p class="notice" id="d-notice"></p>
+      </section>
+
+      <section class="card" id="system">
+        <h2>System</h2>
+        <p class="sub">ジャケットが生まれるしくみ</p>
+        <ol class="flow" id="d-flow"></ol>
+        <ul class="points" id="d-points"></ul>
+      </section>
+    </div>
+
     <section class="block" id="everyone">
       <div class="block-head">
         <h2>みんなの My Cover</h2>
@@ -138,6 +170,22 @@
       <div class="shelf" id="shelf"></div>
       <button class="pill hidden" id="more">もっと見る</button>
       <a class="pill" id="to-home" href="./">すべて見る（作品ページ）</a>
+    </section>
+
+    <!-- 作品ページだけ：展示情報（詳しく）とクレジット -->
+    <section class="card hidden" id="exhibition">
+      <h2>Exhibition</h2>
+      <p class="sub" id="ex-theme"></p>
+      <dl class="facts" id="ex-facts"></dl>
+      <h3>会場の構成</h3>
+      <ul class="layout" id="ex-layout"></ul>
+      <a class="pill hidden" id="ex-map" target="_blank" rel="noopener">地図を開く</a>
+    </section>
+
+    <section class="card hidden" id="credit">
+      <h2>Credit</h2>
+      <p class="credit-name"><span id="cr-name"></span><small id="cr-name-en"></small></p>
+      <p class="credit-aff" id="cr-aff"></p>
     </section>
 
     <section class="card info" id="info-card">
@@ -157,7 +205,7 @@
 
 <footer class="foot">
   <a href="./" id="foot-home">『My Cover』作品ページへ</a>
-  <p class="credit" id="credit"></p>
+  <p class="credit" id="foot-credit"></p>
 </footer>
 
 <script src="config.js"></script>
